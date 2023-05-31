@@ -11,6 +11,7 @@
 		1F74987F2A26E91E0064CF75 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F74987E2A26E91E0064CF75 /* ContentView.swift */; };
 		1F7498812A26E91F0064CF75 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F7498802A26E91F0064CF75 /* Assets.xcassets */; };
 		1F7498852A26E91F0064CF75 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F7498842A26E91F0064CF75 /* Preview Assets.xcassets */; };
+		1FECBF392A27F9CA00F4AD89 /* PeopleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FECBF382A27F9CA00F4AD89 /* PeopleView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 		1F7498802A26E91F0064CF75 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1F7498822A26E91F0064CF75 /* Purah.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Purah.entitlements; sourceTree = "<group>"; };
 		1F7498842A26E91F0064CF75 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		1FECBF382A27F9CA00F4AD89 /* PeopleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,11 +54,12 @@
 		1F74987B2A26E91E0064CF75 /* Purah */ = {
 			isa = PBXGroup;
 			children = (
-				1F74987C2A26E91E0064CF75 /* PurahApp.swift */,
-				1F74987E2A26E91E0064CF75 /* ContentView.swift */,
 				1F7498802A26E91F0064CF75 /* Assets.xcassets */,
-				1F7498822A26E91F0064CF75 /* Purah.entitlements */,
+				1F74987E2A26E91E0064CF75 /* ContentView.swift */,
+				1FECBF382A27F9CA00F4AD89 /* PeopleView.swift */,
 				1F7498832A26E91F0064CF75 /* Preview Content */,
+				1F74987C2A26E91E0064CF75 /* PurahApp.swift */,
+				1F7498822A26E91F0064CF75 /* Purah.entitlements */,
 			);
 			path = Purah;
 			sourceTree = "<group>";
@@ -141,6 +144,7 @@
 			files = (
 				1F74987F2A26E91E0064CF75 /* ContentView.swift in Sources */,
 				1F74987D2A26E91E0064CF75 /* PurahApp.swift in Sources */,
+				1FECBF392A27F9CA00F4AD89 /* PeopleView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,6 +273,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSContactsUsageDescription = "Show names, birthdays, etc...";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -307,6 +312,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSContactsUsageDescription = "Show names, birthdays, etc...";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

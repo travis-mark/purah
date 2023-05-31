@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         TabView {
-            Text("Tab 1")
+            PeopleView()
                 .tabItem {
                     Image(systemName: "person.2")
                     Text("People")
@@ -34,7 +34,6 @@ struct ContentView: View {
                 .tabItem {
                     Image(systemName: "waveform.path.ecg.rectangle")
                     Text("Vitals")
-                    
                 }
         }
     }

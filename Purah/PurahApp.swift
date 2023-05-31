@@ -7,8 +7,11 @@
 
 import SwiftUI
 
-@main
-struct PurahApp: App {
+func bundleName() -> String {
+    return Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ?? "Purah"
+}
+
+@main struct PurahApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
