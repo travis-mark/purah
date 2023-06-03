@@ -15,6 +15,7 @@
 		1F9D1CE62A2B723F00A2C2B5 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9D1CE52A2B723F00A2C2B5 /* MapView.swift */; };
 		1F9D1CE82A2B725E00A2C2B5 /* PhotosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9D1CE72A2B725E00A2C2B5 /* PhotosView.swift */; };
 		1F9D1CEA2A2B728300A2C2B5 /* VitalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9D1CE92A2B728300A2C2B5 /* VitalsView.swift */; };
+		1F9D1CED2A2B7E5300A2C2B5 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9D1CEC2A2B7E5300A2C2B5 /* Util.swift */; };
 		1FECBF392A27F9CA00F4AD89 /* PeopleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FECBF382A27F9CA00F4AD89 /* PeopleView.swift */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +30,8 @@
 		1F9D1CE52A2B723F00A2C2B5 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		1F9D1CE72A2B725E00A2C2B5 /* PhotosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosView.swift; sourceTree = "<group>"; };
 		1F9D1CE92A2B728300A2C2B5 /* VitalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalsView.swift; sourceTree = "<group>"; };
+		1F9D1CEB2A2B7AA700A2C2B5 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		1F9D1CEC2A2B7E5300A2C2B5 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		1FECBF382A27F9CA00F4AD89 /* PeopleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -72,6 +75,8 @@
 				1F74987C2A26E91E0064CF75 /* PurahApp.swift */,
 				1F9D1CE32A2B71D900A2C2B5 /* TodayView.swift */,
 				1F9D1CE92A2B728300A2C2B5 /* VitalsView.swift */,
+				1F9D1CEB2A2B7AA700A2C2B5 /* README.md */,
+				1F9D1CEC2A2B7E5300A2C2B5 /* Util.swift */,
 			);
 			path = Purah;
 			sourceTree = "<group>";
@@ -157,6 +162,7 @@
 				1F74987F2A26E91E0064CF75 /* ContentView.swift in Sources */,
 				1F9D1CEA2A2B728300A2C2B5 /* VitalsView.swift in Sources */,
 				1F74987D2A26E91E0064CF75 /* PurahApp.swift in Sources */,
+				1F9D1CED2A2B7E5300A2C2B5 /* Util.swift in Sources */,
 				1F9D1CE62A2B723F00A2C2B5 /* MapView.swift in Sources */,
 				1F9D1CE42A2B71D900A2C2B5 /* TodayView.swift in Sources */,
 				1FECBF392A27F9CA00F4AD89 /* PeopleView.swift in Sources */,
@@ -289,6 +295,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "Show calendar items";
 				INFOPLIST_KEY_NSContactsUsageDescription = "Show names, birthdays, etc...";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -328,6 +335,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "Show calendar items";
 				INFOPLIST_KEY_NSContactsUsageDescription = "Show names, birthdays, etc...";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;

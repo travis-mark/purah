@@ -6,12 +6,6 @@ import Contacts
 
 // TODO: Filters
 
-func formatBirthday(_ dc: DateComponents) -> String {
-    let calendar = Calendar.current
-    let d = calendar.date(from: dc)!
-    return DateFormatter.localizedString(from: d, dateStyle: .short, timeStyle: .none)
-}
-
 struct ContactImageView: View {
     let contact: CNContact
     
@@ -64,7 +58,7 @@ struct ContactDetailView: View {
                 HStack(alignment: .top) {
                     Text(CNContact.localizedString(forKey: CNContactBirthdayKey))
                     Spacer()
-                    Text(formatBirthday(birthday))
+                    Text(birthday, style: .date)
                 }
             }
             // Phone Number
@@ -79,44 +73,40 @@ struct ContactDetailView: View {
                     }
                 }
             }
-            // TODO: E-mail
-            if contact.isKeyAvailable(CNContactEmailAddressesKey), let birthday = contact.birthday {
+            // E-mail Addresses
+            if contact.isKeyAvailable(CNContactEmailAddressesKey) && contact.emailAddresses.count > 0 {
                 HStack {
                     Text(CNContact.localizedString(forKey: CNContactEmailAddressesKey))
                     Spacer()
-                    Text(formatBirthday(birthday))
+                    Text("TODO: E-mail")
                 }
             }
-            // TODO: Address
-            if contact.isKeyAvailable(CNContactPostalAddressesKey), let birthday = contact.birthday {
+            if contact.isKeyAvailable(CNContactPostalAddressesKey) && contact.postalAddresses.count > 0 {
                 HStack {
                     Text(CNContact.localizedString(forKey: CNContactPostalAddressesKey))
                     Spacer()
-                    Text(formatBirthday(birthday))
+                    Text("TODO: Address")
                 }
             }
-            // TODO: Dates
-            if contact.isKeyAvailable(CNContactDatesKey), let birthday = contact.birthday {
+            if contact.isKeyAvailable(CNContactDatesKey) && contact.dates.count > 0 {
                 HStack {
                     Text(CNContact.localizedString(forKey: CNContactDatesKey))
                     Spacer()
-                    Text(formatBirthday(birthday))
+                    Text("TODO: Dates")
                 }
             }
-            // TODO: Relations
-            if contact.isKeyAvailable(CNContactRelationsKey), let birthday = contact.birthday {
+            if contact.isKeyAvailable(CNContactRelationsKey) && contact.contactRelations.count > 0 {
                 HStack {
                     Text(CNContact.localizedString(forKey: CNContactRelationsKey))
                     Spacer()
-                    Text(formatBirthday(birthday))
+                    Text("TODO: Relations")
                 }
             }
-            // TODO: URLs
-            if contact.isKeyAvailable(CNContactUrlAddressesKey), let birthday = contact.birthday {
+            if contact.isKeyAvailable(CNContactUrlAddressesKey) && contact.urlAddresses.count > 0 {
                 HStack {
                     Text(CNContact.localizedString(forKey: CNContactUrlAddressesKey))
                     Spacer()
-                    Text(formatBirthday(birthday))
+                    Text("TODO: URLs")
                 }
             }
             // TODO: ContactFieldName(contact: contact, key: CNContactSocialProfilesKey)
