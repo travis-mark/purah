@@ -54,7 +54,7 @@ struct TodayView: View {
                 let events = eventStore.events(matching: predicate)
                 self.events = events
             } else {
-                // handle error
+                // TODO: Events handle error
             }
         }
     }
@@ -75,7 +75,7 @@ struct TodayView: View {
                         }
                     }
                 } else {
-                    // handle error
+                    // TODO: Reminder handle error
                 }
             }
         }
