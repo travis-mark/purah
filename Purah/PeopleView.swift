@@ -6,29 +6,6 @@ import Contacts
 
 // TODO: Filters
 
-struct ContactFieldName: View {
-    let contact: CNContact
-    let key: String
-    
-    var body: some View {
-        if contact.isKeyAvailable(key), let value = contact.value(forKey: key)  {
-            if let string = value as? String {
-                HStack {
-                    Text(CNContact.localizedString(forKey: key))
-                        .font(.headline)
-                    Spacer()
-                    Text(string)
-                        .font(.subheadline)
-                }
-                // TODO: Handle CNLabeledValue
-            } else {
-                Text(CNContact.localizedString(forKey: key))
-                    .font(.headline).foregroundColor(.red)
-            }
-        }
-    }
-}
-
 func formatBirthday(_ dc: DateComponents) -> String {
     let calendar = Calendar.current
     let d = calendar.date(from: dc)!

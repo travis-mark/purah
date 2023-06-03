@@ -1,9 +1,5 @@
-//
-//  ContentView.swift
-//  Purah
-//
+//  Purah - ContentView.swift
 //  Created by Travis Luckenbaugh on 5/30/23.
-//
 
 import SwiftUI
 
@@ -15,22 +11,22 @@ struct ContentView: View {
                     Image(systemName: "person.2")
                     Text("People")
                 }
-            Text("Tab 2")
+            TodayView()
                 .tabItem {
                     Image(systemName: "calendar")
                     Text("Today")
                 }
-            Text("Tab 3")
+            MapView()
                 .tabItem {
                     Image(systemName: "map")
                     Text("Map")
                 }
-            Text("Tab 4")
+            PhotosView()
                 .tabItem {
                     Image(systemName: "photo.on.rectangle")
                     Text("Photos")
                 }
-            Text("Tab 5")
+            VitalsView()
                 .tabItem {
                     Image(systemName: "waveform.path.ecg.rectangle")
                     Text("Vitals")

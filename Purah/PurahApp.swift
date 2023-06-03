@@ -1,9 +1,5 @@
-//
-//  PurahApp.swift
-//  Purah
-//
+//  Purah - PurahApp.swift
 //  Created by Travis Luckenbaugh on 5/30/23.
-//
 
 import SwiftUI
 
