@@ -11,8 +11,8 @@ struct ContactFieldName: View {
     let key: String
     
     var body: some View {
-        if contact.isKeyAvailable(key) {
-            if let string = contact.value(forKey: key) as? String {
+        if contact.isKeyAvailable(key), let value = contact.value(forKey: key)  {
+            if let string = value as? String {
                 HStack {
                     Text(CNContact.localizedString(forKey: key))
                         .font(.headline)
@@ -20,7 +20,7 @@ struct ContactFieldName: View {
                     Text(string)
                         .font(.subheadline)
                 }
-            // TODO: Handle CNLabeledValue
+                // TODO: Handle CNLabeledValue
             } else {
                 Text(CNContact.localizedString(forKey: key))
                     .font(.headline).foregroundColor(.red)
@@ -29,24 +29,127 @@ struct ContactFieldName: View {
     }
 }
 
+func formatBirthday(_ dc: DateComponents) -> String {
+    let calendar = Calendar.current
+    let d = calendar.date(from: dc)!
+    return DateFormatter.localizedString(from: d, dateStyle: .short, timeStyle: .none)
+}
+
+struct ContactImageView: View {
+    let contact: CNContact
+    
+    var body: some View {
+        if contact.isKeyAvailable(CNContactImageDataAvailableKey) && contact.imageDataAvailable, let data = contact.imageData, let uiImage = UIImage(data: data) {
+            Image(uiImage: uiImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+        } else if contact.isKeyAvailable(CNContactTypeKey) {
+            Image(systemName: contact.contactType.rawValue == 0 ? "person" : "building")
+        } else {
+            Image(systemName: "questionmark.circle")
+        }
+    }
+}
+
 struct ContactDetailView: View {
     @State var contact: CNContact
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 10) {
-                ContactFieldName(contact: contact, key: CNContactJobTitleKey)
-                ContactFieldName(contact: contact, key: CNContactOrganizationNameKey)
-                ContactFieldName(contact: contact, key: CNContactEmailAddressesKey)
-                ContactFieldName(contact: contact, key: CNContactPhoneNumbersKey)
-                // TODO: Add more fields
-                Spacer()
+        List {
+            if contact.isKeyAvailable(CNContactOrganizationNameKey) || contact.isKeyAvailable(CNContactDepartmentNameKey) || contact.isKeyAvailable(CNContactJobTitleKey) {
+                Section("") {
+                    if contact.isKeyAvailable(CNContactOrganizationNameKey), contact.organizationName != "" {
+                        HStack {
+                            Text(CNContact.localizedString(forKey: CNContactOrganizationNameKey))
+                            Spacer()
+                            Text(contact.organizationName)
+                        }
+                    }
+                    if contact.isKeyAvailable(CNContactDepartmentNameKey), contact.departmentName != "" {
+                        HStack {
+                            Text(CNContact.localizedString(forKey: CNContactDepartmentNameKey))
+                            Spacer()
+                            Text(contact.departmentName)
+                        }
+                    }
+                    if contact.isKeyAvailable(CNContactJobTitleKey), contact.jobTitle != "" {
+                        HStack {
+                            Text(CNContact.localizedString(forKey: CNContactJobTitleKey))
+                            Spacer()
+                            Text(contact.jobTitle)
+                        }
+                    }
+                }
             }
+            
+            // Birthday
+            if contact.isKeyAvailable(CNContactBirthdayKey), let birthday = contact.birthday {
+                HStack(alignment: .top) {
+                    Text(CNContact.localizedString(forKey: CNContactBirthdayKey))
+                    Spacer()
+                    Text(formatBirthday(birthday))
+                }
+            }
+            // Phone Number
+            if contact.isKeyAvailable(CNContactPhoneNumbersKey) && contact.phoneNumbers.count > 0 {
+                HStack {
+                    Text(CNContact.localizedString(forKey: CNContactPhoneNumbersKey))
+                    Spacer()
+                    VStack {
+                        ForEach(contact.phoneNumbers, id:\.identifier) { phoneNumber in
+                            Text(phoneNumber.value.stringValue)
+                        }
+                    }
+                }
+            }
+            // TODO: E-mail
+            if contact.isKeyAvailable(CNContactEmailAddressesKey), let birthday = contact.birthday {
+                HStack {
+                    Text(CNContact.localizedString(forKey: CNContactEmailAddressesKey))
+                    Spacer()
+                    Text(formatBirthday(birthday))
+                }
+            }
+            // TODO: Address
+            if contact.isKeyAvailable(CNContactPostalAddressesKey), let birthday = contact.birthday {
+                HStack {
+                    Text(CNContact.localizedString(forKey: CNContactPostalAddressesKey))
+                    Spacer()
+                    Text(formatBirthday(birthday))
+                }
+            }
+            // TODO: Dates
+            if contact.isKeyAvailable(CNContactDatesKey), let birthday = contact.birthday {
+                HStack {
+                    Text(CNContact.localizedString(forKey: CNContactDatesKey))
+                    Spacer()
+                    Text(formatBirthday(birthday))
+                }
+            }
+            // TODO: Relations
+            if contact.isKeyAvailable(CNContactRelationsKey), let birthday = contact.birthday {
+                HStack {
+                    Text(CNContact.localizedString(forKey: CNContactRelationsKey))
+                    Spacer()
+                    Text(formatBirthday(birthday))
+                }
+            }
+            // TODO: URLs
+            if contact.isKeyAvailable(CNContactUrlAddressesKey), let birthday = contact.birthday {
+                HStack {
+                    Text(CNContact.localizedString(forKey: CNContactUrlAddressesKey))
+                    Spacer()
+                    Text(formatBirthday(birthday))
+                }
+            }
+            // TODO: ContactFieldName(contact: contact, key: CNContactSocialProfilesKey)
+            // TODO: ContactFieldName(contact: contact, key: CNContactInstantMessageAddressesKey)
         }
         .navigationTitle("\(contact.givenName) \(contact.familyName)")
-        .padding()
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarItems(trailing: ContactImageView(contact: contact))
         .onAppear {
-            // TODO: Load full data
+            fetchContact()
         }
     }
     
@@ -70,7 +173,9 @@ struct ContactDetailView: View {
             CNContactPhoneticOrganizationNameKey,
             CNContactBirthdayKey,
             CNContactNonGregorianBirthdayKey,
-            CNContactNoteKey,
+    //            com.apple.developer.contacts.notes is bullshit
+    //            https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_developer_contacts_notes
+    //            CNContactNoteKey,
             CNContactImageDataKey,
             CNContactThumbnailImageDataKey,
             CNContactImageDataAvailableKey,
@@ -83,13 +188,13 @@ struct ContactDetailView: View {
             CNContactRelationsKey,
             CNContactSocialProfilesKey,
             CNContactInstantMessageAddressesKey,
-        ] as [CNKeyDescriptor]
+        ]
         
         DispatchQueue.global().async {
-            store.requestAccess(for: .contacts) { granted, error in
+            store.requestAccess(for: .contacts) { granted, accessError in
                 var result: CNContact?
                 if granted {
-                    let fetchRequest = CNContactFetchRequest(keysToFetch: keysToFetch)
+                    let fetchRequest = CNContactFetchRequest(keysToFetch: keysToFetch as [CNKeyDescriptor])
                     fetchRequest.predicate = CNContact.predicateForContacts(withIdentifiers: [contact.identifier])
                     
                     do {
@@ -97,7 +202,8 @@ struct ContactDetailView: View {
                             result = contact
                         }
                     } catch {
-                        print("Failed to fetch contact: \(error.localizedDescription)")
+                        let fetchError = error
+                        print("Failed to fetch contact: \(fetchError.localizedDescription)")
                     }
                 }
                 DispatchQueue.main.async {
