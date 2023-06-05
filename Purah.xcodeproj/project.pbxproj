@@ -297,6 +297,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "Show calendar items";
 				INFOPLIST_KEY_NSContactsUsageDescription = "Show names, birthdays, etc...";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "This app needs access to health data to track and display vital measurements.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Show photos";
 				INFOPLIST_KEY_NSRemindersUsageDescription = "Show reminders";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -339,6 +340,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "Show calendar items";
 				INFOPLIST_KEY_NSContactsUsageDescription = "Show names, birthdays, etc...";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "This app needs access to health data to track and display vital measurements.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Show photos";
 				INFOPLIST_KEY_NSRemindersUsageDescription = "Show reminders";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
