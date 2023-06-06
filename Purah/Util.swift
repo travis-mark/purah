@@ -13,3 +13,12 @@ extension Text {
         }
     }
 }
+
+func daySpan(of date: Date) -> (Date, Date) {
+    let calendar = Calendar.current
+    let midnight = calendar.startOfDay(for: date)
+    return (
+        calendar.date(bySettingHour: 0, minute: 0, second: 0, of: midnight) ?? date,
+        calendar.date(bySettingHour: 23, minute: 59, second: 59, of: midnight) ?? date
+    )
+}

@@ -21,21 +21,33 @@ struct TodayView: View {
     var body: some View {
         List(calendarItems, id: \.calendarItemIdentifier) { item in
             if let event = item as? EKEvent {
-                VStack(alignment: .leading) {
-                    Text(event.title)
-                        .font(.headline)
-                    Text(event.startDate, style: textDateStyle)
-                        .font(.subheadline)
+                HStack {
+                    Image(systemName: "calendar")
+                    VStack(alignment: .leading) {
+                        Text(event.title)
+                            .font(.headline)
+                        Text(event.startDate, style: textDateStyle)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
                 }
             } else if let reminder = item as? EKReminder {
-                VStack(alignment: .leading) {
-                    Text(reminder.title)
-                        .font(.headline)
-                    Text(reminder.dueDateComponents, style: textDateStyle)
-                        .font(.subheadline)
+                HStack {
+                    if reminder.completionDate != nil {
+                        Image(systemName: "checkmark.circle")
+                    } else {
+                        Image(systemName: "circle")
+                    }
+                    VStack(alignment: .leading) {
+                        Text(reminder.title)
+                            .font(.headline)
+                        Text(reminder.dueDateComponents, style: textDateStyle)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
                 }
             } else {
-                VStack {}
+                HStack {}
             }
         }
         .onAppear {
@@ -48,9 +60,8 @@ struct TodayView: View {
         let eventStore = EKEventStore()
         eventStore.requestAccess(to: .event) { granted, error in
             if granted {
-                let startDate = Date()
-                let endDate = Calendar.current.date(byAdding: .day, value: 1, to: startDate)!
-                let predicate = eventStore.predicateForEvents(withStart: startDate, end: endDate, calendars: nil)
+                let (start, end) = daySpan(of: Date())
+                let predicate = eventStore.predicateForEvents(withStart: start, end: end, calendars: nil)
                 let events = eventStore.events(matching: predicate)
                 self.events = events
             } else {
@@ -63,14 +74,13 @@ struct TodayView: View {
             let eventStore = EKEventStore()
             eventStore.requestAccess(to: .reminder) { granted, error in
                 if granted {
-                    let startDate = Date()
-                    let endDate = Calendar.current.date(byAdding: .day, value: 1, to: startDate)!
+                    let (start, end) = daySpan(of: Date())
                     let predicate = eventStore.predicateForReminders(in: nil)
                     eventStore.fetchReminders(matching: predicate) { reminders in
                         if let reminders = reminders {
                             self.reminders = reminders.filter { reminder in
                                 guard let dueDate = reminder.dueDateComponents?.date else { return false }
-                                return dueDate >= startDate && dueDate < endDate
+                                return dueDate >= start && dueDate < end
                             }
                         }
                     }
