@@ -5,21 +5,28 @@ import SwiftUI
 import HealthKit
 
 struct HKQuantityViewModel {
+    let dateString: String
     let quantityTypeLocalizedString: String
     let quantityValue: Double
     let quantityUnitLocalizedString: String
     let uuid: UUID
-}
-
-extension HKQuantitySample {
-    var quantityViewModel: HKQuantityViewModel {
-        switch quantityType {
+    
+    init(_ sample: HKQuantitySample) {
+        dateString = string(fromStartDate: sample.startDate, to: sample.endDate)
+        uuid = sample.uuid
+        switch sample.quantityType {
         case HKQuantityType.quantityType(forIdentifier: .bodyMass):
-            return HKQuantityViewModel(quantityTypeLocalizedString: NSLocalizedString("Weight", comment: "Body mass"), quantityValue: quantity.doubleValue(for: .pound()), quantityUnitLocalizedString: NSLocalizedString("lbs", comment: "pounds"), uuid: uuid)
+            quantityTypeLocalizedString = NSLocalizedString("Weight", comment: "Body mass")
+            quantityValue = sample.quantity.doubleValue(for: .pound())
+            quantityUnitLocalizedString =  NSLocalizedString("lbs", comment: "pounds")
         case HKQuantityType.quantityType(forIdentifier: .bodyFatPercentage):
-            return HKQuantityViewModel(quantityTypeLocalizedString: NSLocalizedString("Body Fat", comment: "Body fat"), quantityValue: quantity.doubleValue(for: .count()) * 100, quantityUnitLocalizedString: NSLocalizedString("%", comment: "percent"), uuid: uuid)
+            quantityTypeLocalizedString = NSLocalizedString("Body Fat", comment: "Body fat")
+            quantityValue = sample.quantity.doubleValue(for: .count()) * 100
+            quantityUnitLocalizedString =  NSLocalizedString("%", comment: "percent")
         default:
-            return HKQuantityViewModel(quantityTypeLocalizedString: quantityType.identifier, quantityValue: quantity.doubleValue(for: .count()), quantityUnitLocalizedString: NSLocalizedString("each", comment: "each"), uuid: uuid)
+            quantityTypeLocalizedString = sample.quantityType.identifier
+            quantityValue = sample.quantity.doubleValue(for: .count())
+            quantityUnitLocalizedString = NSLocalizedString("each", comment: "each")
         }
     }
 }
@@ -29,11 +36,18 @@ struct VitalsView: View {
     @State private var samples: [HKQuantitySample] = []
     
     var body: some View {
-        List(samples.map({ $0.quantityViewModel }), id: \.uuid) { vm in
+        List(samples.map({ HKQuantityViewModel($0) }), id: \.uuid) { vm in
             HStack {
-                Text(vm.quantityTypeLocalizedString)
+                VStack(alignment: .leading) {
+                    Text(vm.quantityTypeLocalizedString)
+                        .font(.headline)
+                    Text(vm.dateString)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
                 Spacer()
                 Text("\(vm.quantityValue) \(vm.quantityUnitLocalizedString)")
+                    
             }
         }.onAppear {
             requestAuthorization()
@@ -42,7 +56,7 @@ struct VitalsView: View {
     
     private func requestAuthorization() {
         // TODO: More sample types
-        let typesToRead: Set<HKSampleType> = [HKSampleType.quantityType(forIdentifier: .bodyMass)!, HKSampleType.quantityType(forIdentifier: .bodyFatPercentage)!]
+        let typesToRead: Set<HKSampleType> = [HKSampleType.quantityType(forIdentifier: .bodyMass)!, HKSampleType.quantityType(forIdentifier: .bodyFatPercentage)!, HKWorkoutType.workoutType()]
         
         healthStore.requestAuthorization(toShare: nil, read: typesToRead) { success, error in
             if success {

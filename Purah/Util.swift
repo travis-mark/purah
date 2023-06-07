@@ -22,3 +22,32 @@ func daySpan(of date: Date) -> (Date, Date) {
         calendar.date(bySettingHour: 23, minute: 59, second: 59, of: midnight) ?? date
     )
 }
+
+func string(fromStartDate startDate: Date, to endDate: Date) -> String {
+    let calendar = Calendar.current
+    if (startDate == endDate) {
+        let dtfmt = DateFormatter()
+        dtfmt.dateStyle = .short
+        dtfmt.timeStyle = .short
+        return dtfmt.string(from: startDate)
+    } else {
+        let startDay = calendar.dateComponents([.year, .month, .hour], from: startDate)
+        let endDay = calendar.dateComponents([.year, .month, .hour], from: endDate)
+        if (startDay != endDay) {
+            let dfmt = DateFormatter()
+            dfmt.dateStyle = .short
+            dfmt.timeStyle = .none
+            let tfmt = DateFormatter()
+            tfmt.dateStyle = .none
+            tfmt.timeStyle = .short
+            return dfmt.string(from: startDate) + " " + tfmt.string(from: startDate) + " - " + tfmt.string(from: endDate)
+        } else {
+            let dfmt = DateFormatter()
+            dfmt.dateStyle = .short
+            dfmt.timeStyle = .none
+            return dfmt.string(from: startDate) + " - " + dfmt.string(from: endDate)
+        }
+    }
+    
+    
+}
