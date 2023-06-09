@@ -4,6 +4,7 @@
 import SwiftUI
 import Contacts
 
+// TODO: Better handling for blanks / gaps
 // TODO: Filters
 
 struct ContactImageView: View {
@@ -52,61 +53,129 @@ struct ContactDetailView: View {
                     }
                 }
             }
-            
             // Birthday
             if contact.isKeyAvailable(CNContactBirthdayKey), let birthday = contact.birthday {
                 HStack(alignment: .top) {
                     Text(CNContact.localizedString(forKey: CNContactBirthdayKey))
+                        .font(.headline)
                     Spacer()
                     Text(birthday, style: .date)
                 }
             }
             // Phone Number
             if contact.isKeyAvailable(CNContactPhoneNumbersKey) && contact.phoneNumbers.count > 0 {
-                HStack {
-                    Text(CNContact.localizedString(forKey: CNContactPhoneNumbersKey))
-                    Spacer()
-                    VStack {
-                        ForEach(contact.phoneNumbers, id:\.identifier) { phoneNumber in
-                            Text(phoneNumber.value.stringValue)
+                VStack {
+                    HStack {
+                        Text(CNContact.localizedString(forKey: CNContactPhoneNumbersKey))
+                            .font(.headline)
+                        Spacer()
+                    }
+                    ForEach(contact.phoneNumbers, id:\.identifier) { record in
+                        if let label = record.label {
+                            let localized = CNLabeledValue<NSString>.localizedString(forLabel: label)
+                            HStack {
+                                Text(localized).font(.subheadline)
+                                Spacer()
+                                Text(record.value.stringValue)
+                            }
                         }
                     }
                 }
             }
             // E-mail Addresses
             if contact.isKeyAvailable(CNContactEmailAddressesKey) && contact.emailAddresses.count > 0 {
-                HStack {
-                    Text(CNContact.localizedString(forKey: CNContactEmailAddressesKey))
-                    Spacer()
-                    Text("TODO: E-mail")
+                VStack {
+                    HStack {
+                        Text(CNContact.localizedString(forKey: CNContactEmailAddressesKey))
+                            .font(.headline)
+                        Spacer()
+                    }
+                    ForEach(contact.phoneNumbers, id:\.identifier) { record in
+                        if let label = record.label {
+                            let localized = CNLabeledValue<NSString>.localizedString(forLabel: label)
+                            HStack {
+                                Text(localized).font(.subheadline)
+                                Spacer()
+                                Text(record.value.stringValue)
+                            }
+                        }
+                    }
                 }
             }
             if contact.isKeyAvailable(CNContactPostalAddressesKey) && contact.postalAddresses.count > 0 {
-                HStack {
-                    Text(CNContact.localizedString(forKey: CNContactPostalAddressesKey))
-                    Spacer()
-                    Text("TODO: Address")
+                VStack {
+                    HStack {
+                        Text(CNContact.localizedString(forKey: CNContactPostalAddressesKey))
+                            .font(.headline)
+                        Spacer()
+                    }
+                    ForEach(contact.postalAddresses, id:\.identifier) { record in
+                        if let label = record.label {
+                            let localized = CNLabeledValue<NSString>.localizedString(forLabel: label)
+                            HStack {
+                                Text(localized).font(.subheadline)
+                                Spacer()
+                                Text(CNPostalAddressFormatter.string(from: record.value, style: .mailingAddress))
+                            }
+                        }
+                    }
                 }
             }
             if contact.isKeyAvailable(CNContactDatesKey) && contact.dates.count > 0 {
-                HStack {
-                    Text(CNContact.localizedString(forKey: CNContactDatesKey))
-                    Spacer()
-                    Text("TODO: Dates")
+                VStack {
+                    HStack {
+                        Text(CNContact.localizedString(forKey: CNContactDatesKey))
+                            .font(.headline)
+                        Spacer()
+                    }
+                    ForEach(contact.dates, id:\.identifier) { record in
+                        if let label = record.label {
+                            let localized = CNLabeledValue<NSString>.localizedString(forLabel: label)
+                            HStack {
+                                Text(localized).font(.subheadline)
+                                Spacer()
+                                Text(record.value as DateComponents, style: .date)
+                            }
+                        }
+                    }
                 }
             }
             if contact.isKeyAvailable(CNContactRelationsKey) && contact.contactRelations.count > 0 {
-                HStack {
-                    Text(CNContact.localizedString(forKey: CNContactRelationsKey))
-                    Spacer()
-                    Text("TODO: Relations")
+                VStack {
+                    HStack {
+                        Text(CNContact.localizedString(forKey: CNContactRelationsKey))
+                            .font(.headline)
+                        Spacer()
+                    }
+                    ForEach(contact.contactRelations, id:\.identifier) { record in
+                        if let label = record.label {
+                            let localized = CNLabeledValue<NSString>.localizedString(forLabel: label)
+                            HStack {
+                                Text(localized).font(.subheadline)
+                                Spacer()
+                                Text(record.value.name)
+                            }
+                        }
+                    }
                 }
             }
             if contact.isKeyAvailable(CNContactUrlAddressesKey) && contact.urlAddresses.count > 0 {
-                HStack {
-                    Text(CNContact.localizedString(forKey: CNContactUrlAddressesKey))
-                    Spacer()
-                    Text("TODO: URLs")
+                VStack {
+                    HStack {
+                        Text(CNContact.localizedString(forKey: CNContactUrlAddressesKey))
+                            .font(.headline)
+                        Spacer()
+                    }
+                    ForEach(contact.urlAddresses, id:\.identifier) { record in
+                        if let label = record.label {
+                            let localized = CNLabeledValue<NSString>.localizedString(forLabel: label)
+                            HStack {
+                                Text(localized).font(.subheadline)
+                                Spacer()
+                                Text(record.value as String)
+                            }
+                        }
+                    }
                 }
             }
             // TODO: ContactFieldName(contact: contact, key: CNContactSocialProfilesKey)
