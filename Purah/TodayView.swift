@@ -10,6 +10,7 @@ import EventKit
 // TODO: Display Controls
 
 struct TodayView: View {
+    private let eventStore = EKEventStore()
     @State private var events: [EKEvent] = []
     @State private var reminders: [EKReminder] = []
     @State private var textDateStyle: Text.DateStyle = .time
@@ -33,11 +34,20 @@ struct TodayView: View {
                 }
             } else if let reminder = item as? EKReminder {
                 HStack {
-                    if reminder.completionDate != nil {
-                        Image(systemName: "checkmark.circle")
-                    } else {
-                        Image(systemName: "circle")
-                    }
+                    // TODO: Why is render failing
+                    Image(systemName: reminder.isCompleted ? "checkmark.circle" : "circle")
+                        .onTapGesture {
+                            reminder.completionDate = reminder.completionDate != nil ? nil : Date()
+                            reminder.isCompleted = !reminder.isCompleted
+                            do {
+                                try eventStore.save(reminder, commit: true)
+                            } catch {
+                                showError(error)
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                activeRowIdentifier = nil
+                            }
+                        }
                     VStack(alignment: .leading) {
                         Text(reminder.title)
                             .font(.headline)
@@ -57,7 +67,6 @@ struct TodayView: View {
     }
         
     func loadEvents() {
-        let eventStore = EKEventStore()
         eventStore.requestAccess(to: .event) { granted, error in
             if granted {
                 let (start, end) = daySpan(of: Date())
@@ -71,22 +80,21 @@ struct TodayView: View {
     }
     
     func loadReminders() {
-            let eventStore = EKEventStore()
-            eventStore.requestAccess(to: .reminder) { granted, error in
-                if granted {
-                    let (start, end) = daySpan(of: Date())
-                    let predicate = eventStore.predicateForReminders(in: nil)
-                    eventStore.fetchReminders(matching: predicate) { reminders in
-                        if let reminders = reminders {
-                            self.reminders = reminders.filter { reminder in
-                                guard let dueDate = reminder.dueDateComponents?.date else { return false }
-                                return dueDate >= start && dueDate < end
-                            }
+        eventStore.requestAccess(to: .reminder) { granted, error in
+            if granted {
+                let (start, end) = daySpan(of: Date())
+                let predicate = eventStore.predicateForReminders(in: nil)
+                eventStore.fetchReminders(matching: predicate) { reminders in
+                    if let reminders = reminders {
+                        self.reminders = reminders.filter { reminder in
+                            guard let dueDate = reminder.dueDateComponents?.date else { return false }
+                            return dueDate >= start && dueDate < end
                         }
                     }
-                } else {
-                    // TODO: Reminder handle error
                 }
+            } else {
+                // TODO: Reminder handle error
             }
         }
+    }
 }
