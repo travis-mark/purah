@@ -9,19 +9,34 @@ import EventKit
 // TODO: Date Picker
 // TODO: Display Controls
 
+struct ReminderViewModel {
+    let calendarItemIdentifier: String
+    let completionDate: Date?
+    let dueDateComponents: DateComponents?
+    var isCompleted: Bool
+    let title: String
+    let sourceObject: EKReminder?
+    
+    init(_ reminder: EKReminder) {
+        calendarItemIdentifier = reminder.calendarItemIdentifier
+        completionDate = reminder.completionDate
+        dueDateComponents = reminder.dueDateComponents
+        isCompleted = reminder.isCompleted
+        title = reminder.title
+        sourceObject = reminder
+    }
+}
+
 struct TodayView: View {
     private let eventStore = EKEventStore()
     @State private var events: [EKEvent] = []
-    @State private var reminders: [EKReminder] = []
+    @State private var reminders: [ReminderViewModel] = []
     @State private var textDateStyle: Text.DateStyle = .time
     
-    var calendarItems: [EKCalendarItem] {
-        return events + reminders
-    }
     
     var body: some View {
-        List(calendarItems, id: \.calendarItemIdentifier) { item in
-            if let event = item as? EKEvent {
+        List {
+            ForEach(events, id: \.calendarItemIdentifier) { event in
                 HStack {
                     Image(systemName: "calendar")
                     VStack(alignment: .leading) {
@@ -32,20 +47,19 @@ struct TodayView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-            } else if let reminder = item as? EKReminder {
+            }
+            ForEach(Array(reminders.enumerated()), id: \.1.calendarItemIdentifier) { index, reminder in
                 HStack {
-                    // TODO: Why is render failing
                     Image(systemName: reminder.isCompleted ? "checkmark.circle" : "circle")
                         .onTapGesture {
-                            reminder.completionDate = reminder.completionDate != nil ? nil : Date()
-                            reminder.isCompleted = !reminder.isCompleted
+                            guard let object = reminder.sourceObject else { return }
+                            object.completionDate = reminder.completionDate != nil ? nil : Date()
+                            object.isCompleted = !reminder.isCompleted
+                            reminders[index] = ReminderViewModel(object)
                             do {
-                                try eventStore.save(reminder, commit: true)
+                                try eventStore.save(object, commit: true)
                             } catch {
                                 showError(error)
-                            }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                activeRowIdentifier = nil
                             }
                         }
                     VStack(alignment: .leading) {
@@ -56,8 +70,6 @@ struct TodayView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-            } else {
-                HStack {}
             }
         }
         .onAppear {
@@ -89,7 +101,7 @@ struct TodayView: View {
                         self.reminders = reminders.filter { reminder in
                             guard let dueDate = reminder.dueDateComponents?.date else { return false }
                             return dueDate >= start && dueDate < end
-                        }
+                        }.map({ ReminderViewModel($0) })
                     }
                 }
             } else {
