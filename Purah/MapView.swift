@@ -26,7 +26,6 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     }
 }
 
-// TODO: (???) Orientation / rotation
 struct MapView: View {
     
     @State private var locationManager: LocationManager?
